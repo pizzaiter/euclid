@@ -42,25 +42,15 @@ impl<T: fmt::Debug, U> fmt::Debug for TypedSideOffsets2D<T, U> {
 pub type SideOffsets2D<T> = TypedSideOffsets2D<T, UnknownUnit>;
 
 impl<T: Copy, U> TypedSideOffsets2D<T, U> {
-    /// Constructor taking a scalar for each side.
-    pub fn new(top: T, right: T, bottom: T, left: T) -> Self {
+    /// Constructor taking a scalar value or `Length` for each side.
+    pub fn new<N: Into<Length<T, U>>>(top: N, right: N, bottom: N, left: N) -> Self {
         TypedSideOffsets2D {
-            top: top,
-            right: right,
-            bottom: bottom,
-            left: left,
+            top: top.into().get(),
+            right: right.into().get(),
+            bottom: bottom.into().get(),
+            left: left.into().get(),
             _unit: PhantomData,
         }
-    }
-
-    /// Constructor taking a typed Length for each side.
-    pub fn from_lengths(
-        top: Length<T, U>,
-        right: Length<T, U>,
-        bottom: Length<T, U>,
-        left: Length<T, U>,
-    ) -> Self {
-        TypedSideOffsets2D::new(top.0, right.0, bottom.0, left.0)
     }
 
     /// Access self.top as a typed Length instead of a scalar value.
@@ -83,14 +73,10 @@ impl<T: Copy, U> TypedSideOffsets2D<T, U> {
         Length::new(self.left)
     }
 
-    /// Constructor setting the same value to all sides, taking a scalar value directly.
-    pub fn new_all_same(all: T) -> Self {
+    /// Constructor setting the same value to all sides, taking a scalar value or `Length`.
+    pub fn new_all_same<N: Into<Length<T, U>>>(all: N) -> Self {
+        let all = all.into().get();
         TypedSideOffsets2D::new(all, all, all, all)
-    }
-
-    /// Constructor setting the same value to all sides, taking a typed Length.
-    pub fn from_length_all_same(all: Length<T, U>) -> Self {
-        TypedSideOffsets2D::new_all_same(all.0)
     }
 }
 
@@ -133,6 +119,6 @@ where
 impl<T: Copy + Zero, U> TypedSideOffsets2D<T, U> {
     /// Constructor, setting all sides to zero.
     pub fn zero() -> Self {
-        TypedSideOffsets2D::new(Zero::zero(), Zero::zero(), Zero::zero(), Zero::zero())
+        TypedSideOffsets2D::new(T::zero(), T::zero(), T::zero(), T::zero())
     }
 }

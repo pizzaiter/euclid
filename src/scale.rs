@@ -89,6 +89,12 @@ impl<T: Clone + One + Div<T, Output = T>, Src, Dst> TypedScale<T, Src, Dst> {
     }
 }
 
+impl<T, Src, Dst> From<T> for TypedScale<T, Src, Dst> {
+    fn from(other: T) -> TypedScale<T, Src, Dst> {
+        TypedScale::new(other)
+    }
+}
+
 // scale0 * scale1
 impl<T: Clone + Mul<T, Output = T>, A, B, C> Mul<TypedScale<T, B, C>> for TypedScale<T, A, B> {
     type Output = TypedScale<T, A, C>;

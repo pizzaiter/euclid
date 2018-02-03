@@ -84,6 +84,12 @@ impl<Unit, T: Clone> Length<T, Unit> {
     }
 }
 
+impl<T, U> From<T> for Length<T, U> {
+    fn from(other: T) -> Length<T, U> {
+        Length::new(other)
+    }
+}
+
 impl<T: fmt::Debug + Clone, U> fmt::Debug for Length<T, U> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.get().fmt(f)

@@ -12,6 +12,7 @@ use num::{One, Zero};
 use point::TypedPoint2D;
 use vector::{TypedVector2D, vec2};
 use rect::TypedRect;
+use scale::TypedScale;
 use transform3d::TypedTransform3D;
 use std::ops::{Add, Mul, Div, Sub, Neg};
 use std::marker::PhantomData;
@@ -223,7 +224,9 @@ where T: Copy + Clone +
     }
 
     /// Returns a scale transform.
-    pub fn create_scale(x: T, y: T) -> Self {
+    pub fn create_scale<N: Into<TypedScale<T, Src, Dst>>>(x: N, y: N) -> Self {
+        let x = x.into().get();
+        let y = y.into().get();
         let _0 = Zero::zero();
         TypedTransform2D::row_major(
              x, _0,
@@ -347,7 +350,7 @@ where T: Copy + Clone +
             self.m21, self.m22,
             self.m31, self.m32,
         )
-    }   
+    }
 }
 
 impl <T, Src, Dst> TypedTransform2D<T, Src, Dst>

@@ -64,25 +64,20 @@ impl<T: fmt::Display, U> fmt::Display for TypedPoint2D<T, U> {
 }
 
 impl<T: Copy, U> TypedPoint2D<T, U> {
-    /// Constructor taking scalar values directly.
+    /// Constructor taking scalar values or `Length`s.
     #[inline]
-    pub fn new(x: T, y: T) -> Self {
+    pub fn new<N: Into<Length<T, U>>>(x: N, y: N) -> Self {
         TypedPoint2D {
-            x: x,
-            y: y,
+            x: x.into().get(),
+            y: y.into().get(),
             _unit: PhantomData,
         }
     }
 
-    /// Constructor taking properly typed Lengths instead of scalar values.
-    #[inline]
-    pub fn from_lengths(x: Length<T, U>, y: Length<T, U>) -> Self {
-        point2(x.0, y.0)
-    }
-
     /// Create a 3d point from this one, using the specified z value.
     #[inline]
-    pub fn extend(&self, z: T) -> TypedPoint3D<T, U> {
+    pub fn extend<N: Into<Length<T, U>>>(&self, z: N) -> TypedPoint3D<T, U> {
+        let z = z.into().get();
         point3(self.x, self.y, z)
     }
 
@@ -439,21 +434,15 @@ impl<T: fmt::Display, U> fmt::Display for TypedPoint3D<T, U> {
 }
 
 impl<T: Copy, U> TypedPoint3D<T, U> {
-    /// Constructor taking scalar values directly.
+    /// Constructor taking scalar values or `Length`s.
     #[inline]
-    pub fn new(x: T, y: T, z: T) -> Self {
+    pub fn new<N: Into<Length<T, U>>>(x: N, y: N, z: N) -> Self {
         TypedPoint3D {
-            x: x,
-            y: y,
-            z: z,
+            x: x.into().get(),
+            y: y.into().get(),
+            z: z.into().get(),
             _unit: PhantomData,
         }
-    }
-
-    /// Constructor taking properly typed Lengths instead of scalar values.
-    #[inline]
-    pub fn from_lengths(x: Length<T, U>, y: Length<T, U>, z: Length<T, U>) -> Self {
-        point3(x.0, y.0, z.0)
     }
 
     /// Cast this point into a vector.

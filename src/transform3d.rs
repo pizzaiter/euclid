@@ -393,11 +393,6 @@ where T: Copy + Clone +
         )
     }
 
-    /// Convenience function to create a scale transform from a TypedScale.
-    pub fn from_scale(scale: TypedScale<T, Src, Dst>) -> Self {
-        TypedTransform3D::create_scale(scale.get(), scale.get(), scale.get())
-    }
-
     /// Returns the given 2d point transformed by this transform.
     ///
     /// The input point must be use the unit Src, and the returned point has the unit Dst.
@@ -482,7 +477,10 @@ where T: Copy + Clone +
     }
 
     /// Create a 3d scale transform
-    pub fn create_scale(x: T, y: T, z: T) -> Self {
+    pub fn create_scale<N: Into<TypedScale<T, Src, Dst>>>(x: N, y: N, z: N) -> Self {
+        let x = x.into().get();
+        let y = y.into().get();
+        let z = z.into().get();
         let (_0, _1): (T, T) = (Zero::zero(), One::one());
         TypedTransform3D::row_major(
              x, _0, _0, _0,
