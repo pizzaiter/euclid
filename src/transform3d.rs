@@ -490,6 +490,11 @@ where T: Copy + Clone +
         )
     }
 
+    /// Create a 3d uniform scale transform.
+    pub fn create_uniform_scale<N: Into<TypedScale<T, Src, Dst>> + Copy>(all: N) -> Self {
+        Self::create_scale(all, all, all)
+    }
+
     /// Returns a transform with a scale applied before self's transformation.
     #[cfg_attr(feature = "unstable", must_use)]
     pub fn pre_scale(&self, x: T, y: T, z: T) -> Self {

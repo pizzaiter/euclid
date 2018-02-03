@@ -235,6 +235,11 @@ where T: Copy + Clone +
         )
     }
 
+    /// Returns a uniform scale transform.
+    pub fn create_uniform_scale<N: Into<TypedScale<T, Src, Dst>> + Copy>(all: N) -> Self {
+        Self::create_scale(all, all)
+    }
+
     /// Applies a scale after self's transformation and returns the resulting transform.
     #[cfg_attr(feature = "unstable", must_use)]
     pub fn post_scale(&self, x: T, y: T) -> Self {
